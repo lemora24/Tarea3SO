@@ -8,7 +8,29 @@
 
 #define BUFFER_SIZE 4096
 
-void handle_request(int client_socket, const char *root_dir) {
+void handle_request(int client_socket, const char *root_dir, const char *protocol) {
+    // Si el protocolo NO es HTTP, simular otros protocolos
+    if (strcmp(protocol, "HTTP") != 0) {
+        if (strcmp(protocol, "FTP") == 0) {
+            dprintf(client_socket, "220 (Fake FTP Server Ready)\r\n");
+        } else if (strcmp(protocol, "SSH") == 0) {
+            dprintf(client_socket, "SSH-2.0-FakeSSH_1.0\r\n");
+        } else if (strcmp(protocol, "SMTP") == 0) {
+            dprintf(client_socket, "220 (Fake SMTP Server Ready)\r\n");
+        } else if (strcmp(protocol, "DNS") == 0) {
+            dprintf(client_socket, "Fake DNS Response\r\n");
+        } else if (strcmp(protocol, "TELNET") == 0) {
+            dprintf(client_socket, "Fake Telnet Server Ready\r\n");
+        } else if (strcmp(protocol, "SNMP") == 0) {
+            dprintf(client_socket, "Fake SNMP Response\r\n");
+        } else {
+            dprintf(client_socket, "500 Unknown Protocol\r\n");
+        }
+        return;
+    }
+
+    // --- Desde aquí, comportamiento normal HTTP ---
+
     char buffer[BUFFER_SIZE];
     int bytes_read = read(client_socket, buffer, sizeof(buffer) - 1);
 
@@ -91,7 +113,6 @@ void handle_request(int client_socket, const char *root_dir) {
             } else {
                 dprintf(client_socket, "HTTP/1.1 200 OK\r\n\r\n");
             }
-
         } else {
             dprintf(client_socket, "HTTP/1.1 400 Bad Request\r\n\r\n");
         }
@@ -120,4 +141,3 @@ void handle_request(int client_socket, const char *root_dir) {
 
     close(fd);
 }
-

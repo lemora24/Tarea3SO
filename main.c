@@ -2,12 +2,15 @@
 #include <stdlib.h>
 #include <string.h>
 
-// Declaración para evitar archivo .h
-void start_server(int thread_count, const char *root_dir, int port);
+// Declaraciones directas
+void start_server(int thread_count, const char *root_dir, int port, const char *protocol);
+
+// Variable global de protocolo
+const char *global_protocol = "HTTP";  // Por defecto
 
 int main(int argc, char *argv[]) {
-    if (argc != 7) {
-        fprintf(stderr, "Uso: %s -n <hilos> -w <root> -p <puerto>\n", argv[0]);
+    if (argc < 7) {
+        fprintf(stderr, "Uso: %s -n <hilos> -w <root> -p <puerto> [-proto <protocolo>]\n", argv[0]);
         return 1;
     }
 
@@ -22,6 +25,8 @@ int main(int argc, char *argv[]) {
             root = argv[++i];
         } else if (strcmp(argv[i], "-p") == 0 && i + 1 < argc) {
             port = atoi(argv[++i]);
+        } else if (strcmp(argv[i], "-proto") == 0 && i + 1 < argc) {
+            global_protocol = argv[++i];
         } else {
             fprintf(stderr, "Parámetro no reconocido: %s\n", argv[i]);
             return 1;
@@ -29,11 +34,11 @@ int main(int argc, char *argv[]) {
     }
 
     if (thread_count <= 0 || port <= 0 || root == NULL) {
-        fprintf(stderr, "Parámetros inválidos. Verifique los valores ingresados.\n");
+        fprintf(stderr, "Parámetros inválidos.\n");
         return 1;
     }
 
-    start_server(thread_count, root, port);
+    start_server(thread_count, root, port, global_protocol);
 
     return 0;
 }
