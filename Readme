@@ -1,3 +1,7 @@
+PARA COMPILAR 
+Make clean
+Make 
+
 Comandos para ejecutar el programa:
 Incializar el servidor: ./prethread-WebServer -n 4 -w ./www -p 8080
 -w es la carpeta donde vamos a conseguir los archivos de prueba
