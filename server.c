@@ -37,41 +37,37 @@ void *thread_worker(void *arg) {
     return NULL;
 }
 
+//Inicializar servevr 
 void start_server(int thread_count, const char *dir, int port, const char *protocol) {
     root_dir = dir;
     global_protocol = protocol;
-
     server_socket = socket(AF_INET, SOCK_STREAM, 0);
     if (server_socket < 0) {
-        perror("Error al crear el socket");
+        perror("Error al crear socket");
         exit(1);
     }
-
     int opt = 1;
     setsockopt(server_socket, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt));
-
     struct sockaddr_in server;
     memset(&server, 0, sizeof(server));
     server.sin_family = AF_INET;
     server.sin_addr.s_addr = INADDR_ANY;
     server.sin_port = htons(port);
-
     if (bind(server_socket, (struct sockaddr*)&server, sizeof(server)) < 0) {
-        perror("Error en bind");
+        perror("Error en bind de archivo");
         exit(1);
     }
-
     if (listen(server_socket, MAX_QUEUE) < 0) {
-        perror("Error en listen");
+        perror("Error en listen de archivo");
         exit(1);
     }
 
-    printf("Servidor escuchando en puerto %d con %d hilos (Protocolo: %s).\n", port, thread_count, protocol);
+    printf("Servidor escuchando en puerto %d con %d hilos con Protocolo: %s\n", port, thread_count, protocol);
 
     pthread_t threads[thread_count];
     for (int i = 0; i < thread_count; i++) {
         if (pthread_create(&threads[i], NULL, thread_worker, NULL) != 0) {
-            fprintf(stderr, "Error al crear el hilo %d\n", i);
+            fprintf(stderr, "Error al crear hilo %d\n", i);
             exit(1);
         }
     }

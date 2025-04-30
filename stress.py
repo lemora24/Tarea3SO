@@ -3,6 +3,7 @@ import threading
 import sys
 import time
 
+##Funcion para ejecutar cliente http
 def lanzar_httpclient(host, path, method):
     try:
         subprocess.run(["./HTTPclient", "-h", host, "-m", method, "-p", path], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)

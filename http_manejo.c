@@ -8,6 +8,7 @@
 
 #define BUFFER_SIZE 4096
 
+//Metodo para manejar solicitudes de diferentes protocolos
 void handle_request(int client_socket, const char *root_dir, const char *protocol) {
     // Si el protocolo NO es HTTP, simular otros protocolos
     if (strcmp(protocol, "HTTP") != 0) {
@@ -29,7 +30,7 @@ void handle_request(int client_socket, const char *root_dir, const char *protoco
         return;
     }
 
-    // --- Desde aquí, comportamiento normal HTTP ---
+    //comportamiento normal HTTP
 
     char buffer[BUFFER_SIZE];
     int bytes_read = read(client_socket, buffer, sizeof(buffer) - 1);
@@ -77,7 +78,7 @@ void handle_request(int client_socket, const char *root_dir, const char *protoco
         strcat(file_path, "index.html");
     }
 
-    // DELETE: eliminar archivo
+    // DELETE eliminar archivo
     if (is_delete) {
         if (access(file_path, F_OK) != 0) {
             dprintf(client_socket, "HTTP/1.1 404 Not Found\r\n\r\n");
@@ -120,7 +121,7 @@ void handle_request(int client_socket, const char *root_dir, const char *protoco
         return;
     }
 
-    // GET o HEAD: servir archivo
+    // GET o HEAD servir archivo
     int fd = open(file_path, O_RDONLY);
     if (fd < 0) {
         dprintf(client_socket, "HTTP/1.1 404 Not Found\r\n\r\n");

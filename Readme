@@ -1,0 +1,27 @@
+Comandos para ejecutar el programa:
+Incializar el servidor: ./prethread-WebServer -n 4 -w ./www -p 8080
+-w es la carpeta donde vamos a conseguir los archivos de prueba
+-p puerto, -n numero de hilos
+Para seleccionar el protocolo
+./prethread-WebServer -n 4 -w ./www -p 9090 -proto FTP
+donde -proto es el protocolo a seleccionar
+
+EN OTRA TERMINAL
+Probar el programa
+./HTTPclient -h localhost:8080 -m GET -p /index.html
+./HTTPclient -h localhost:8080 -m HEAD -p /index.html
+./HTTPclient -h localhost:8080 -m POST -p /nuevo.txt -d "Hola"
+./HTTPclient -h localhost:8080 -m PUT -p /nuevo.txt -d "actualizar contenido"
+./HTTPclient -h localhost:8080 -m GET -p /archivo_grande.bin -o recibido.bin
+
+PROBAR EL STRESS TEST 
+python3 stress.py -n 100 -h localhost:8080
+-n numero de hilos -h el host
+
+PROBAR PROTOCOLOS
+./prethread-WebServer -n 2 -w ./www -p 9001 -proto FTP
+telnet localhost 9001
+
+OPCIONES -proto SSH, SMTP, DNS, TELNET, SNMP.
+
+
